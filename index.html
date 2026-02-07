@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Terms of Service | Britannia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Discord/OG Embed (edit these values to your domain + image) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Britannia" />
+  <meta property="og:title" content="Terms of Service | Britannia" />
+  <meta property="og:description" content="Official Terms of Service for Britannia." />
+  <meta property="og:url" content="https://YOUR_GITHUB_PAGES_DOMAIN/" />
+  <meta property="og:image" content="https://YOUR_GITHUB_PAGES_DOMAIN/assets/embed.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Terms of Service | Britannia" />
+  <meta name="twitter:description" content="Official Terms of Service for Britannia." />
+  <meta name="twitter:image" content="https://YOUR_GITHUB_PAGES_DOMAIN/assets/embed.png" />
+  <meta name="theme-color" content="#0ea5e9" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: {
+            deep: '#020617',
+            ocean: '#0ea5e9',
+            teal: '#14b8a6',
+            sand: '#fbbf24',
+            sunset: '#fb7185',
+            dusk: '#8b5cf6'
+          },
+          boxShadow: {
+            soft: '0 20px 80px rgba(2,6,23,.45)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root{
+      --mx: 50vw;
+      --my: 40vh;
+      --ocean: 14,165,233;     /* #0ea5e9 */
+      --teal: 20,184,166;      /* #14b8a6 */
+      --sand: 251,191,36;      /* #fbbf24 */
+      --sunset: 251,113,133;   /* #fb7185 */
+      --dusk: 139,92,246;      /* #8b5cf6 */
+    }
+
+    html { scroll-behavior: smooth; }
+    body { overflow-x:hidden; }
+
+    /* Background: ocean + sunset horizon */
+    .bg-sunset-ocean{
+      position: fixed;
+      inset: 0;
+      z-index: -50;
+      background:
+        radial-gradient(900px 520px at 50% 18%, rgba(var(--sunset), .35), transparent 60%),
+        radial-gradient(800px 520px at 70% 22%, rgba(var(--sand), .22), transparent 62%),
+        radial-gradient(900px 600px at 20% 20%, rgba(var(--dusk), .22), transparent 62%),
+        radial-gradient(1000px 700px at 50% 85%, rgba(var(--ocean), .28), transparent 65%),
+        linear-gradient(180deg,
+          rgba(2,6,23,1) 0%,
+          rgba(7,16,46,1) 28%,
+          rgba(20,30,70,1) 48%,
+          rgba(9,35,66,1) 62%,
+          rgba(3,105,161,1) 90%,
+          rgba(2,6,23,1) 100%);
+    }
+
+    /* film grain */
+    .noise{
+      position: fixed;
+      inset: 0;
+      z-index: -40;
+      opacity: .07;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+    }
+
+    /* Water caustics (tide shimmer) */
+    .caustics{
+      position: fixed;
+      inset: -20%;
+      z-index: -35;
+      pointer-events: none;
+      opacity: .18;
+      mix-blend-mode: screen;
+      filter: blur(.2px) saturate(115%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='turbulence' baseFrequency='.012' numOctaves='2' seed='8'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7'/%3E%3C/filter%3E%3Crect width='360' height='360' filter='url(%23c)' fill='white' opacity='.9'/%3E%3C/svg%3E");
+      background-size: 820px 820px;
+      background-position: 0 0;
+      animation: causticsDrift 14s linear infinite;
+      transform: translateZ(0);
+    }
+    @keyframes causticsDrift{
+      0%{ background-position: 0 0; transform: translate3d(0,0,0) scale(1); }
+      50%{ background-position: 220px 140px; transform: translate3d(0,-6px,0) scale(1.02); }
+      100%{ background-position: 440px 280px; transform: translate3d(0,0,0) scale(1); }
+    }
+
+    /* spotlight follows cursor */
+    .spotlight{
+      position: fixed;
+      inset: 0;
+      z-index: -30;
+      pointer-events: none;
+      background:
+        radial-gradient(700px circle at var(--mx) var(--my),
+          rgba(255,255,255,.06),
+          rgba(255,255,255,.03) 24%,
+          transparent 58%);
+      transition: background .06s linear;
+    }
+
+    /* Ocean canvas behind content */
+    #oceanCanvas{
+      position: fixed;
+      inset: 0;
+      z-index: -45;
+      width: 100%;
+      height: 100%;
+      opacity: .95;
+      pointer-events: none;
+    }
+
+    /* Scroll progress */
+    #scrollProgress{
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      z-index: 70;
+      background: linear-gradient(90deg, rgba(var(--sunset),1), rgba(var(--sand),1), rgba(var(--ocean),1), rgba(var(--teal),1));
+      box-shadow: 0 0 18px rgba(var(--ocean), .30);
+      transform-origin: left center;
+    }
+
+    /* Glass surfaces (dark, premium) */
+    .glass{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 18px 80px rgba(0,0,0,.45);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* Subtle sheen */
+    .sheen{ position: relative; overflow: hidden; isolation: isolate; }
+    .sheen::before{
+      content:"";
+      position:absolute;
+      inset:-120% -40%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.09), transparent);
+      transform: translateX(-30%) rotate(12deg);
+      opacity:0;
+      transition: opacity .25s ease;
+      z-index: 0;
+      pointer-events:none;
+    }
+    .sheen:hover::before{ opacity:1; animation: sheen 1.1s ease forwards; }
+    @keyframes sheen{ from { transform: translateX(-45%) rotate(12deg);} to { transform: translateX(45%) rotate(12deg);} }
+    .sheen > * { position: relative; z-index: 1; }
+
+    /* Reveal animations */
+    .reveal{
+      opacity:0;
+      transform: translateY(16px);
+      transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1);
+      will-change: opacity, transform;
+    }
+    .reveal.active{ opacity:1; transform:none; }
+
+    /* Sidebar links */
+    .slink{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius: 14px;
+      color: rgba(226,232,240,.80);
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+    .slink:hover{ background: rgba(255,255,255,.06); color: rgba(255,255,255,.92); }
+    .slink.active{
+      background: linear-gradient(135deg, rgba(var(--ocean),.20), rgba(var(--sunset),.14));
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.96);
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      html { scroll-behavior: auto; }
+      .reveal { transition: none !important; transform: none !important; opacity: 1 !important; }
+      .spotlight { display:none; }
+    }
+  </style>
+</head>
+
+<body class="font-inter text-slate-100 antialiased relative">
+  <div class="bg-sunset-ocean"></div>
+  <canvas id="oceanCanvas"></canvas>
+  <div class="caustics"></div>
+  <div class="noise"></div>
+  <div class="spotlight"></div>
+  <div id="scrollProgress"></div>
+
+  <!-- Hero / Top -->
+  <section class="relative">
+    <div class="max-w-7xl mx-auto px-6 pt-10 pb-12">
+      <div class="grid lg:grid-cols-[360px_1fr] gap-8 items-start">
+
+        <!-- Sidebar (desktop sticky) -->
+        <aside class="lg:sticky lg:top-6">
+          <div class="glass rounded-3xl p-6">
+            <div class="flex items-center gap-3">
+              <div class="h-11 w-11 rounded-2xl overflow-hidden flex items-center justify-center"
+     style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14)">
+  <img src="assets/logo.png" alt="Britannia logo" class="h-full w-full object-cover" />
+</div>
+              <div class="min-w-0">
+                <div class="text-sm uppercase tracking-[0.22em] text-slate-300/70">Britannia</div>
+                <div class="text-lg font-semibold text-white leading-tight">Terms of Service</div>
+              </div>
+            </div>
+
+            <div class="mt-5 rounded-2xl p-4"
+                 style="background: linear-gradient(135deg, rgba(var(--sunset),.14), rgba(var(--sand),.10), rgba(var(--ocean),.10)); border: 1px solid rgba(255,255,255,.10)">
+              <div class="text-xs text-slate-200/80">Last Updated</div>
+              <div class="text-sm font-semibold">January 19, 2026</div>
+            </div>
+
+            <nav class="mt-6 space-y-2 text-sm">
+              <a href="#welcome" class="slink"><span>✨</span><span>Overview</span></a>
+              <a href="#middleman" class="slink"><span>🤝</span><span>Middleman</span></a>
+              <a href="#exchanges" class="slink"><span>🔁</span><span>Exchanges</span></a>
+              <a href="#products" class="slink"><span>🛡️</span><span>Products</span></a>
+              <a href="#vouches" class="slink"><span>🌍</span><span>Vouches</span></a>
+              <a href="#contact" class="slink"><span>💬</span><span>Contact</span></a>
+            </nav>
+
+            <div class="mt-6 flex gap-3">
+              <a href="#welcome" class="flex-1 px-4 py-3 rounded-2xl text-center text-sm font-semibold text-slate-900 sheen"
+                 style="background: linear-gradient(135deg, rgba(var(--sand),1), rgba(var(--sunset),.95)); box-shadow: 0 18px 60px rgba(251,113,133,.18)">
+                Read
+              </a>
+              <a href="#contact" class="flex-1 px-4 py-3 rounded-2xl text-center text-sm font-semibold glass sheen">
+                Support
+              </a>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main hero + content top -->
+        <div>
+          <!-- Hero card (new layout, not a simple band) -->
+          <div class="glass rounded-3xl p-8 md:p-10 overflow-hidden relative">
+            <!-- Horizon silhouette (palms + dunes) -->
+            <div class="absolute inset-x-0 bottom-0 opacity-[0.28] pointer-events-none">
+              <svg viewBox="0 0 1440 220" xmlns="http://www.w3.org/2000/svg" class="w-full h-[170px]">
+                <defs>
+                  <linearGradient id="sil" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="rgba(0,0,0,0.0)"/>
+                    <stop offset="65%" stop-color="rgba(0,0,0,0.55)"/>
+                    <stop offset="100%" stop-color="rgba(0,0,0,0.85)"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#sil)" d="M0,170 C130,145 260,155 390,165 C520,175 650,195 780,185 C910,175 1040,135 1170,138 C1300,141 1370,160 1440,170 L1440,220 L0,220 Z"/>
+                <g fill="rgba(0,0,0,0.85)">
+                  <path d="M210 95c18-22 44-30 55-28-17 10-27 19-31 31 14-8 31-11 48-8-18 10-29 20-35 34 16-10 34-14 55-11-22 12-37 28-46 48-9-22-22-44-46-66z"/>
+                  <path d="M244 98c-8 28-10 63-10 96h14c0-31 2-63 10-92z"/>
+                  <path d="M1190 92c16-20 39-28 49-26-15 9-24 17-27 28 13-7 27-10 42-7-16 9-26 18-31 30 14-8 30-12 48-9-20 11-33 25-41 43-8-19-20-38-40-59z"/>
+                  <path d="M1220 95c-7 26-9 60-9 99h13c0-32 2-63 9-95z"/>
+                </g>
+              </svg>
+            </div>
+            <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full"
+                 style="background: radial-gradient(circle at 30% 30%, rgba(var(--sunset),.45), rgba(var(--sand),.22), transparent 65%); filter: blur(4px);"></div>
+            <div class="absolute -bottom-28 -left-28 h-80 w-80 rounded-full"
+                 style="background: radial-gradient(circle at 30% 30%, rgba(var(--ocean),.40), rgba(var(--teal),.20), transparent 70%);"></div>
+
+            <div class="relative">
+              <div class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-slate-200/70">
+                <span class="h-2 w-2 rounded-full" style="background: rgba(var(--sand),1)"></span>
+                Legal & Compliance
+              </div>
+
+              <h1 class="mt-4 text-4xl md:text-6xl font-bold text-white tracking-tight">
+                Terms of Service
+              </h1>
+              <p class="mt-4 text-slate-200/85 text-lg">Service Terms • Guidelines</p>
+
+              <div class="mt-7 flex flex-col sm:flex-row gap-3">
+                <a href="#welcome" class="px-6 py-3 rounded-2xl text-sm font-semibold text-slate-900 sheen"
+                   style="background: linear-gradient(135deg, rgba(var(--sand),1), rgba(var(--sunset),.95)); box-shadow: 0 18px 60px rgba(251,191,36,.16)">
+                  Start reading
+                </a>
+                <a href="https://discord.gg/evergarden" target="_blank" rel="noopener noreferrer"
+                   class="px-6 py-3 rounded-2xl text-sm font-semibold glass sheen">
+                  Join our Discord
+                </a>
+              </div>
+
+              <div class="mt-6 max-w-3xl">
+                <p class="font-serif italic text-[15px] sm:text-base leading-relaxed text-slate-100/80">
+                  “Quiet warmth, playful mischief, and sweet chaos that somehow feels like home.”
+                </p>
+              </div>
+
+              <!-- Horizon waves divider -->
+              <div class="mt-10 opacity-90">
+                <svg viewBox="0 0 1440 130" xmlns="http://www.w3.org/2000/svg" class="w-full h-[88px]">
+                  <defs>
+                    <linearGradient id="sunWave" x1="0" x2="1" y1="0" y2="0">
+                      <stop offset="0%" stop-color="rgba(251,113,133,0.00)"/>
+                      <stop offset="28%" stop-color="rgba(251,113,133,0.20)"/>
+                      <stop offset="52%" stop-color="rgba(251,191,36,0.18)"/>
+                      <stop offset="78%" stop-color="rgba(14,165,233,0.16)"/>
+                      <stop offset="100%" stop-color="rgba(20,184,166,0.00)"/>
+                    </linearGradient>
+                  </defs>
+                  <path fill="url(#sunWave)" d="M0,64L60,58.7C120,53,240,43,360,42.7C480,43,600,53,720,58.7C840,64,960,64,1080,58.7C1200,53,1320,43,1380,37.3L1440,32L1440,130L1380,130C1320,130,1200,130,1080,130C960,130,840,130,720,130C600,130,480,130,360,130C240,130,120,130,60,130L0,130Z"/>
+                  <path fill="rgba(255,255,255,0.06)" d="M0,96L80,90.7C160,85,320,75,480,69.3C640,64,800,64,960,69.3C1120,75,1280,85,1360,90.7L1440,96L1440,130L1360,130C1280,130,1120,130,960,130C800,130,640,130,480,130C320,130,160,130,80,130L0,130Z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content blocks: new disposition (stacked premium cards) -->
+          <main class="mt-8 space-y-6">
+
+            <!-- Welcome -->
+            <section id="welcome" class="reveal glass rounded-3xl p-7 md:p-9">
+              <div class="flex items-start justify-between gap-6">
+                <div>
+                  <h2 class="text-xl md:text-2xl font-semibold text-white">✨ Overview</h2>
+                  <p class="mt-2 text-sm text-slate-200/70">General acceptance & policy notice</p>
+                </div>
+                <div class="hidden md:block text-xs text-slate-200/60">Section 01</div>
+              </div>
+              <div class="mt-5 rounded-2xl p-5"
+                   style="background: linear-gradient(135deg, rgba(var(--ocean),.12), rgba(var(--teal),.10), rgba(var(--sand),.10)); border: 1px solid rgba(255,255,255,.10)">
+                <p class="text-sm leading-relaxed">
+                  <strong>By completing any deal in Britannia, you confirm that you have read and accepted these points. I reserve the right to update them at any time without prior notice.</strong>
+                </p>
+              </div>
+            </section>
+
+            <div aria-hidden="true" class="opacity-90">
+              <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-[56px]">
+                <defs>
+                  <linearGradient id="sep1" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stop-color="rgba(14,165,233,0.00)"/>
+                    <stop offset="35%" stop-color="rgba(14,165,233,0.20)"/>
+                    <stop offset="60%" stop-color="rgba(251,191,36,0.16)"/>
+                    <stop offset="100%" stop-color="rgba(251,113,133,0.00)"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#sep1)" d="M0,60 C120,40 240,80 360,60 C480,40 600,20 720,30 C840,40 960,80 1080,70 C1200,60 1320,30 1440,50 L1440,120 L0,120 Z"/>
+                <path fill="rgba(255,255,255,0.06)" d="M0,80 C140,65 260,95 390,85 C520,75 640,55 760,60 C880,65 1020,95 1140,90 C1260,85 1360,70 1440,78 L1440,120 L0,120 Z"/>
+              </svg>
+            </div>
+
+            <!-- Middleman -->
+            <section id="middleman" class="reveal glass rounded-3xl p-7 md:p-9">
+              <div class="flex items-start justify-between gap-6">
+                <div>
+                  <h2 class="text-xl md:text-2xl font-semibold text-white">🤝 Middleman</h2>
+                  <p class="mt-2 text-sm text-slate-200/70">Fees, scope & responsibilities</p>
+                </div>
+                <div class="hidden md:block text-xs text-slate-200/60">Section 02</div>
+              </div>
+              <div class="mt-5">
+                <ul class="list-disc list-inside space-y-3 text-sm text-slate-100/90">
+                  <li>All MM fees are paid upfront and are non-refundable. All orders are final. <strong>MM fee: 5%, $10 fee minimum.</strong></li>
+                  <li>My only responsibility is to hold funds or secure accs during the deal. I am not responsible for anything that occurs after the deal is completed.</li>
+                  <li>I reserve the right to compensate either party if time-wasting or bad faith behavior occurs.</li>
+                  <li>You agree not to use unauthorized methods and accept full responsibility for your deals.</li>
+                  <li><strong>Unless stated otherwise by me, I only middleman FA accs with email changeable or Outlook emails. I dont MM Gmail accounts, hold console info or MM NFA.</strong></li>
+                </ul>
+              </div>
+            </section>
+
+            <div aria-hidden="true" class="opacity-90">
+              <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-[56px]">
+                <defs>
+                  <linearGradient id="sep2" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stop-color="rgba(251,113,133,0.00)"/>
+                    <stop offset="35%" stop-color="rgba(251,113,133,0.18)"/>
+                    <stop offset="60%" stop-color="rgba(14,165,233,0.18)"/>
+                    <stop offset="100%" stop-color="rgba(20,184,166,0.00)"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#sep2)" d="M0,55 C140,85 260,35 380,55 C500,75 620,110 760,95 C900,80 1020,25 1140,30 C1260,35 1360,70 1440,60 L1440,120 L0,120 Z"/>
+                <path fill="rgba(255,255,255,0.06)" d="M0,78 C160,98 300,60 420,72 C540,84 660,110 800,104 C940,98 1060,66 1180,62 C1300,58 1380,78 1440,74 L1440,120 L0,120 Z"/>
+              </svg>
+            </div>
+
+            <!-- Exchanges -->
+            <section id="exchanges" class="reveal glass rounded-3xl p-7 md:p-9">
+              <div class="flex items-start justify-between gap-6">
+                <div>
+                  <h2 class="text-xl md:text-2xl font-semibold text-white">🔁 Exchanges</h2>
+                  <p class="mt-2 text-sm text-slate-200/70">Supported platforms & fees</p>
+                </div>
+                <div class="hidden md:block text-xs text-slate-200/60">Section 03</div>
+              </div>
+              <div class="mt-5">
+                <ul class="list-disc list-inside space-y-3 text-sm text-slate-100/90">
+                  <li>Supported platforms are specified in the exchanges channel. There you will find a design.</li>
+                  <li><strong>All transactions have a 5% to 10% fee (minimum 10$). To find out the exact fee, open ticket to ask.</strong></li>
+                  <li><strong>Payments are accepted only from the in-app balance</strong>; bank, debit, or credit card payments are not accepted or refunded.</li>
+                  <li>Customers are responsible for all fees and additional costs, all transactions are final and non-refundable, and users assume full responsibility for their payments and methods used.</li>
+                </ul>
+              </div>
+            </section>
+
+            <div aria-hidden="true" class="opacity-90">
+              <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-[56px]">
+                <defs>
+                  <linearGradient id="sep3" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stop-color="rgba(20,184,166,0.00)"/>
+                    <stop offset="35%" stop-color="rgba(20,184,166,0.18)"/>
+                    <stop offset="60%" stop-color="rgba(251,191,36,0.16)"/>
+                    <stop offset="100%" stop-color="rgba(14,165,233,0.00)"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#sep3)" d="M0,60 C150,30 260,65 400,60 C540,55 650,35 760,40 C870,45 980,75 1100,70 C1220,65 1340,40 1440,55 L1440,120 L0,120 Z"/>
+                <path fill="rgba(255,255,255,0.06)" d="M0,82 C170,62 300,90 430,82 C560,74 680,60 820,64 C960,68 1080,90 1200,86 C1320,82 1400,70 1440,76 L1440,120 L0,120 Z"/>
+              </svg>
+            </div>
+
+            <!-- Products -->
+            <section id="products" class="reveal glass rounded-3xl p-7 md:p-9">
+              <div class="flex items-start justify-between gap-6">
+                <div>
+                  <h2 class="text-xl md:text-2xl font-semibold text-white">🛡️ Products</h2>
+                  <p class="mt-2 text-sm text-slate-200/70">Risk & ownership disclaimer</p>
+                </div>
+                <div class="hidden md:block text-xs text-slate-200/60">Section 04</div>
+              </div>
+              <div class="mt-5">
+                <ul class="list-disc list-inside space-y-3 text-sm text-slate-100/90">
+                  <li>At the moment, we never saw someone getting some type of restrictions or similar after getting credits but we cant guarantee future actions by Ubi.</li>
+                  <li><strong>All accounts are not OG owned by Yun/o and might be subject to pullbacks, reverts, bans etc.</strong></li>
+                  <li>These are completely out of Yun/o's control and after sale he is NOT responsible for anything, unless warranty is clearly stated in the post.</li>
+                </ul>
+              </div>
+            </section>
+
+            <div aria-hidden="true" class="opacity-90">
+              <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-[56px]">
+                <defs>
+                  <linearGradient id="sep4" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stop-color="rgba(14,165,233,0.00)"/>
+                    <stop offset="35%" stop-color="rgba(251,191,36,0.16)"/>
+                    <stop offset="60%" stop-color="rgba(251,113,133,0.16)"/>
+                    <stop offset="100%" stop-color="rgba(139,92,246,0.00)"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#sep4)" d="M0,58 C120,78 260,45 390,58 C520,71 640,98 760,92 C880,86 1010,52 1140,46 C1270,40 1370,58 1440,64 L1440,120 L0,120 Z"/>
+                <path fill="rgba(255,255,255,0.06)" d="M0,82 C140,98 280,70 420,80 C560,90 690,112 820,108 C950,104 1090,84 1220,76 C1350,68 1410,82 1440,86 L1440,120 L0,120 Z"/>
+              </svg>
+            </div>
+
+            <!-- Vouches -->
+            <section id="vouches" class="reveal glass rounded-3xl p-7 md:p-9">
+              <div class="flex items-start justify-between gap-6">
+                <div>
+                  <h2 class="text-xl md:text-2xl font-semibold text-white">🌍 Community Vouches</h2>
+                  <p class="mt-2 text-sm text-slate-200/70">Reputation & trust history</p>
+                </div>
+                <div class="hidden md:block text-xs text-slate-200/60">Section 05</div>
+              </div>
+
+              <div class="mt-5 grid md:grid-cols-3 gap-4">
+                <div class="rounded-2xl p-5" style="background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10)">
+                  <div class="text-sm text-slate-100/90">✅ Active since <strong>2024</strong></div>
+                  <div class="mt-1 text-xs text-slate-200/70">Time in community</div>
+                </div>
+                <div class="rounded-2xl p-5" style="background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10)">
+                  <div class="text-sm text-slate-100/90">⏰ <strong>24/7 availability</strong></div>
+                  <div class="mt-1 text-xs text-slate-200/70">Response windows</div>
+                </div>
+                <div class="rounded-2xl p-5" style="background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10)">
+                  <div class="text-sm text-slate-100/90">⭐ Public vouches</div>
+                  <div class="mt-1 text-xs text-slate-200/70">Deal history</div>
+                </div>
+              </div>
+
+              <a href="https://myvouch.es/Yuno" target="_blank" rel="noopener noreferrer"
+                 class="inline-block mt-5 px-6 py-3 rounded-2xl text-sm font-semibold text-slate-900 sheen"
+                 style="background: linear-gradient(135deg, rgba(var(--sand),1), rgba(var(--sunset),.95)); box-shadow: 0 18px 60px rgba(251,113,133,.18)">
+                View my vouches
+              </a>
+            </section>
+
+            <div aria-hidden="true" class="opacity-90">
+              <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-[56px]">
+                <defs>
+                  <linearGradient id="sep5" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stop-color="rgba(139,92,246,0.00)"/>
+                    <stop offset="35%" stop-color="rgba(251,113,133,0.16)"/>
+                    <stop offset="60%" stop-color="rgba(14,165,233,0.16)"/>
+                    <stop offset="100%" stop-color="rgba(20,184,166,0.00)"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#sep5)" d="M0,60 C150,40 270,86 410,72 C550,58 650,30 770,34 C890,38 1000,70 1130,74 C1260,78 1360,56 1440,50 L1440,120 L0,120 Z"/>
+                <path fill="rgba(255,255,255,0.06)" d="M0,82 C170,72 300,100 450,92 C600,84 720,66 860,68 C1000,70 1120,90 1250,90 C1380,90 1420,80 1440,78 L1440,120 L0,120 Z"/>
+              </svg>
+            </div>
+
+            <!-- Contact -->
+            <section id="contact" class="reveal glass rounded-3xl p-7 md:p-9">
+              <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div>
+                  <h2 class="text-xl md:text-2xl font-semibold text-white">💬 Contact & Support</h2>
+                  <p class="mt-2 text-sm text-slate-200/70">Questions, services or clarifications</p>
+                </div>
+                <a href="https://discord.gg/evergarden" target="_blank" rel="noopener noreferrer"
+                   class="px-6 py-3 rounded-2xl text-sm font-semibold text-slate-900 sheen"
+                   style="background: linear-gradient(135deg, rgba(var(--sand),1), rgba(var(--sunset),.95)); box-shadow: 0 18px 60px rgba(251,191,36,.14)">
+                  Join our Discord
+                </a>
+              </div>
+
+              <div class="mt-6 border-t border-white/10 pt-6">
+                <h3 class="text-sm font-semibold text-slate-200 uppercase tracking-wider mb-4">Official Yun/o Socials</h3>
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <!-- Instagram -->
+                  <a href="https://instagram.com/wjndyy_" target="_blank" rel="noopener noreferrer"
+                     class="flex items-center gap-3 px-5 py-3 rounded-2xl glass sheen">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" style="color: rgba(var(--sunset), .95)">
+                      <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5a4.25 4.25 0 00-4.25-4.25h-8.5z" />
+                      <path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0 1.5a3.5 3.5 0 110 7 3.5 3.5 0 010-7z" />
+                      <circle cx="17.5" cy="6.5" r="1" />
+                    </svg>
+                    <span class="text-sm">Instagram</span>
+                  </a>
+
+                  <!-- X -->
+                  <a href="https://x.com/Wjndyy" target="_blank" rel="noopener noreferrer"
+                     class="flex items-center gap-3 px-5 py-3 rounded-2xl glass sheen">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-slate-100">
+                      <path d="M18.244 2H21l-6.52 7.455L22.5 22h-6.32l-4.96-6.48L5.68 22H3l6.96-7.96L1.5 2h6.48l4.48 5.96L18.244 2z" />
+                    </svg>
+                    <span class="text-sm">X (Twitter)</span>
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            <footer class="py-10 text-center text-sm text-slate-200/60">
+              © 2026 Britannia. All rights reserved.
+            </footer>
+          </main>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Background music (replace src with your song) -->
+  <audio id="bgAudio" preload="auto" loop>
+    <source src="assets/music.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Music player dock -->
+  <div id="musicDock" class="fixed left-4 bottom-4 z-[95] glass rounded-2xl px-4 py-3 w-[310px] sm:w-[340px] select-none">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="h-10 w-10 rounded-xl flex items-center justify-center"
+             style="background: radial-gradient(circle at 30% 30%, rgba(var(--sand),.35), rgba(var(--sunset),.18), rgba(var(--ocean),.18)); border:1px solid rgba(255,255,255,.14)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white/90" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3v2c-2.5 0-2.5-3-5-3s-2.5 3-5 3-2.5-3-5-3-2.5 3-5 3V12z"/>
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs uppercase tracking-widest text-slate-200/70">Now playing</div>
+          <div id="trackLabel" class="text-sm font-semibold text-white truncate">Ambient Ocean</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="musicBtn" class="h-10 w-10 rounded-xl glass hover:bg-white/10 transition flex items-center justify-center" aria-label="Play/Pause">
+          <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white hidden" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+          </svg>
+        </button>
+
+        <button id="muteBtn" class="h-10 w-10 rounded-xl glass hover:bg-white/10 transition flex items-center justify-center" aria-label="Mute">
+          <svg id="iconVol" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11 5L6 9H2v6h4l5 4V5zm8.5 7a4.5 4.5 0 01-2.5 4.03v-8.06A4.5 4.5 0 0119.5 12z"/>
+          </svg>
+          <svg id="iconMute" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white hidden" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <path d="M16.5 8.5l5 5-1.5 1.5-5-5 1.5-1.5z"/>
+            <path d="M20 8.5l-5 5-1.5-1.5 5-5L20 8.5z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <!-- SEEK BAR (clic + drag) -->
+      <div id="seekBar" class="h-1.5 rounded-full bg-white/10 overflow-hidden relative cursor-pointer select-none">
+        <div id="musicProg" class="h-full rounded-full" style="width:0%; background: linear-gradient(90deg, rgba(var(--sunset),.95), rgba(var(--sand),.9), rgba(var(--ocean),.85));"></div>
+        <div id="seekThumb" class="absolute top-1/2 -translate-y-1/2 h-3 w-3 rounded-full"
+             style="left:0%; background: rgba(251,191,36,.95); box-shadow: 0 0 0 3px rgba(255,255,255,.10);"></div>
+      </div>
+
+      <div class="mt-3 flex items-center gap-3">
+        <span class="text-[11px] text-slate-200/70 w-[34px]" id="timeCur">0:00</span>
+        <input id="vol" type="range" min="0" max="1" step="0.01" value="0.25" class="w-full accent-orange-300" aria-label="Volume">
+        <span class="text-[11px] text-slate-200/70 w-[40px] text-right" id="timeDur">--:--</span>
+      </div>
+
+      <div id="autoplayHint" class="mt-2 text-xs text-slate-200/70 hidden">
+        Tu navegador bloqueó el sonido automático. Toca ▶ para activarlo.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Cursor spotlight
+    const rootStyle = document.documentElement.style;
+    window.addEventListener('pointermove', (e) => {
+      rootStyle.setProperty('--mx', e.clientX + 'px');
+      rootStyle.setProperty('--my', e.clientY + 'px');
+    });
+
+    // Scroll progress
+    const progress = document.getElementById('scrollProgress');
+    function setProgress(){
+      const h = document.documentElement;
+      const scrollTop = h.scrollTop || document.body.scrollTop;
+      const scrollHeight = (h.scrollHeight || document.body.scrollHeight) - h.clientHeight;
+      const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      progress.style.width = pct.toFixed(2) + '%';
+    }
+    window.addEventListener('scroll', setProgress, { passive: true });
+    setProgress();
+
+    // Reveal
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((i) => i.isIntersecting && i.target.classList.add('active'));
+    }, { threshold: 0.14 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Active sidebar link sync (click + scroll) — reliable
+    const sLinks = Array.from(document.querySelectorAll('.slink'));
+    const sections = sLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+    function setActive(id){
+      sLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+    }
+
+    // immediate feedback on click
+    sLinks.forEach(a => a.addEventListener('click', () => setActive(a.getAttribute('href'))));
+
+    // scroll sync: pick the section closest to a focus line
+    let ticking = false;
+    function syncByScroll(){
+      ticking = false;
+      const focusY = 140; // px from top
+      let best = null;
+      let bestDist = Infinity;
+      for(const sec of sections){
+        const r = sec.getBoundingClientRect();
+        if(r.bottom <= 140 || r.top >= window.innerHeight - 120) continue;
+        const dist = Math.abs(r.top - focusY);
+        if(dist < bestDist){ bestDist = dist; best = sec; }
+      }
+      if(best) setActive('#' + best.id);
+    }
+    function onScroll(){
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(syncByScroll);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('hashchange', () => setActive(location.hash));
+
+    setActive(location.hash || '#welcome');
+    onScroll();
+
+    // Ocean canvas: subtle waves + sparkles (sunset reflection)
+    const ocean = document.getElementById('oceanCanvas');
+    const octx = ocean.getContext('2d', { alpha: true });
+    let OW=0, OH=0, spark=[], t0=0;
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
+
+    function resize(){
+      OW = Math.floor(window.innerWidth);
+      OH = Math.floor(window.innerHeight);
+      ocean.width = Math.floor(OW * DPR);
+      ocean.height = Math.floor(OH * DPR);
+      ocean.style.width = OW + 'px';
+      ocean.style.height = OH + 'px';
+      octx.setTransform(DPR,0,0,DPR,0,0);
+      const count = Math.floor((OW*OH)/52000);
+      spark = Array.from({length: count}, () => makeSpark(true));
+    }
+
+    function makeSpark(initial=false){
+      const x = Math.random()*OW;
+      const y = initial ? Math.random()*OH : (OH + 20 + Math.random()*OH*0.2);
+      return { x, y, r: Math.random()*1.2 + 0.4, s: Math.random()*0.45 + 0.15, a: Math.random()*0.22 + 0.06 };
+    }
+
+    window.addEventListener('resize', resize, { passive: true });
+    resize();
+
+    function draw(ts){
+      const t = ts * 0.001;
+      const dt = Math.min(0.05, t - t0 || 0.016);
+      t0 = t;
+
+      octx.clearRect(0,0,OW,OH);
+
+      // Base ocean tint (transparent so background gradients remain)
+      const g = octx.createLinearGradient(0,0,0,OH);
+      g.addColorStop(0, 'rgba(2,6,23,0)');
+      g.addColorStop(0.55,'rgba(14,165,233,0.12)');
+      g.addColorStop(1, 'rgba(20,184,166,0.10)');
+      octx.fillStyle = g;
+      octx.fillRect(0,0,OW,OH);
+
+      // Reflection band near horizon
+      octx.globalAlpha = 0.20;
+      const r = octx.createRadialGradient(OW*0.52, OH*0.22, 40, OW*0.52, OH*0.40, Math.max(OW,OH)*0.9);
+      r.addColorStop(0, 'rgba(251,191,36,0.55)');
+      r.addColorStop(0.18,'rgba(251,113,133,0.26)');
+      r.addColorStop(0.40,'rgba(14,165,233,0.08)');
+      r.addColorStop(1, 'rgba(2,6,23,0)');
+      octx.fillStyle = r;
+      octx.fillRect(0,0,OW,OH);
+
+      // Waves (subtle)
+      const waveCount = 3;
+      for(let i=0;i<waveCount;i++){
+        const baseY = OH*(0.55 + i*0.12);
+        const amp = 10 + i*8;
+        const freq = 0.010 + i*0.003;
+        const speed = 0.75 + i*0.22;
+
+        octx.beginPath();
+        octx.moveTo(0,OH);
+        octx.lineTo(0, baseY);
+        for(let x=0; x<=OW; x+=16){
+          const y = baseY + Math.sin((x*freq) + (t*speed) + i) * amp
+                           + Math.sin((x*(freq*1.85)) - (t*speed*0.65)) * (amp*0.32);
+          octx.lineTo(x, y);
+        }
+        octx.lineTo(OW, baseY);
+        octx.lineTo(OW, OH);
+        octx.closePath();
+
+        octx.globalAlpha = 0.10 - i*0.02;
+        octx.fillStyle = i===0 ? 'rgba(14,165,233,1)' : (i===1 ? 'rgba(20,184,166,1)' : 'rgba(255,255,255,1)');
+        octx.fill();
+      }
+
+      // Sparkles (sunset glitter)
+      octx.globalAlpha = 1;
+      for(const s of spark){
+        s.y -= (s.s * 22) * dt;
+        s.x += Math.sin(t + s.y*0.01) * dt * 10;
+
+        // Only visible mostly under the horizon band
+        const band = Math.max(0, Math.min(1, (s.y - OH*0.18) / (OH*0.70)));
+        octx.globalAlpha = s.a * band;
+
+        octx.beginPath();
+        octx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        octx.fillStyle = 'rgba(251,191,36,1)';
+        octx.fill();
+
+        if(s.y < -20) Object.assign(s, makeSpark(false));
+      }
+
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+
+    // Music
+    const audio = document.getElementById('bgAudio');
+    const musicBtn = document.getElementById('musicBtn');
+    const muteBtn  = document.getElementById('muteBtn');
+    const iconPlay = document.getElementById('iconPlay');
+    const iconPause= document.getElementById('iconPause');
+    const iconVol  = document.getElementById('iconVol');
+    const iconMute = document.getElementById('iconMute');
+    const prog     = document.getElementById('musicProg');
+    const seekBar  = document.getElementById('seekBar');
+    const seekThumb= document.getElementById('seekThumb');
+    const vol      = document.getElementById('vol');
+    const timeCur  = document.getElementById('timeCur');
+    const timeDur  = document.getElementById('timeDur');
+    const hint     = document.getElementById('autoplayHint');
+
+    let seeking = false;
+
+    function fmtTime(s){
+      if(!isFinite(s) || s < 0) return '--:--';
+      const m = Math.floor(s/60);
+      const r = Math.floor(s%60).toString().padStart(2,'0');
+      return `${m}:${r}`;
+    }
+
+    audio.volume = parseFloat(vol.value || '0.25');
+    audio.muted = true; // autoplay-friendly
+
+    function setUI(isPlaying){
+      iconPlay.classList.toggle('hidden', isPlaying);
+      iconPause.classList.toggle('hidden', !isPlaying);
+    }
+    function setMuteUI(isMuted){
+      iconVol.classList.toggle('hidden', isMuted);
+      iconMute.classList.toggle('hidden', !isMuted);
+    }
+
+    async function tryAutoPlay(){
+      try{
+        await audio.play();
+        setUI(true);
+        hint.classList.add('hidden');
+      }catch(e){
+        setUI(false);
+        hint.classList.remove('hidden');
+      }
+    }
+    window.addEventListener('load', tryAutoPlay);
+
+    let unlocked = false;
+    function unlock(){
+      if(unlocked) return;
+      unlocked = true;
+      audio.muted = false;
+      setMuteUI(false);
+      tryAutoPlay();
+      window.removeEventListener('pointerdown', unlock);
+      window.removeEventListener('keydown', unlock);
+    }
+    window.addEventListener('pointerdown', unlock, { passive:true });
+    window.addEventListener('keydown', unlock);
+
+    musicBtn.addEventListener('click', async () => {
+      if(audio.paused){
+        audio.muted = false;
+        setMuteUI(false);
+        try{ await audio.play(); setUI(true); hint.classList.add('hidden'); }
+        catch(e){ hint.classList.remove('hidden'); }
+      }else{
+        audio.pause();
+        setUI(false);
+      }
+    });
+
+    muteBtn.addEventListener('click', () => {
+      audio.muted = !audio.muted;
+      setMuteUI(audio.muted);
+    });
+
+    vol.addEventListener('input', () => {
+      audio.volume = parseFloat(vol.value || '0.25');
+      if(audio.volume > 0) {
+        audio.muted = false;
+        setMuteUI(false);
+      }
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      timeDur.textContent = fmtTime(audio.duration);
+    });
+
+    // --- SEEK (click + drag) ---
+    function setSeekFromClientX(clientX){
+      const rect = seekBar.getBoundingClientRect();
+      const x = Math.min(rect.right, Math.max(rect.left, clientX));
+      const pct = (x - rect.left) / rect.width;
+      if (audio.duration && isFinite(audio.duration)) {
+        audio.currentTime = pct * audio.duration;
+      }
+    }
+
+    seekBar.addEventListener('pointerdown', (e) => {
+      seeking = true;
+      seekBar.setPointerCapture(e.pointerId);
+      setSeekFromClientX(e.clientX);
+    });
+
+    seekBar.addEventListener('pointermove', (e) => {
+      if (!seeking) return;
+      setSeekFromClientX(e.clientX);
+    });
+
+    seekBar.addEventListener('pointerup', () => {
+      seeking = false;
+    });
+    // --- END SEEK ---
+
+    function tick(){
+      const d = audio.duration || 0;
+      const c = audio.currentTime || 0;
+      if(d > 0){
+        const pct = (c/d)*100;
+        prog.style.width = `${pct}%`;
+        seekThumb.style.left = `${pct}%`;
+        timeCur.textContent = fmtTime(c);
+        timeDur.textContent = fmtTime(d);
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>
